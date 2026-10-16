@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+.git/
+.vs/
+.idea/
+.vscode/
+tests/
+**/appsettings.Development.json
+**/keys/
