@@ -32,6 +32,9 @@ public sealed class Device
     public string? FirmwareVersion { get; private set; }
     public int InactivityThresholdMinutes { get; }
 
+    /// <summary>HU-013: minutes without reports before "disconnected". It reports every 10 s (readings) and every 30 s (heartbeat).</summary>
+    public const int DefaultInactivityThresholdMinutes = 1;
+
     public DateTime CreatedAt { get; }
     public DateTime UpdatedAt { get; private set; }
 
@@ -68,7 +71,7 @@ public sealed class Device
         var serial = DeviceSecrets.NormalizeSerial(serialNumber);
         return new Device(Guid.NewGuid(), serial, DeviceSecrets.HashToken(credentials.AuthToken), null, null,
             DeviceSecrets.HashPairingCode(serial, credentials.PairingCode), 0, null, null, null, null,
-            DeviceStatus.NeverReported, null, null, 10, now, now);
+            DeviceStatus.NeverReported, null, null, DefaultInactivityThresholdMinutes, now, now);
     }
 
     /// <summary>

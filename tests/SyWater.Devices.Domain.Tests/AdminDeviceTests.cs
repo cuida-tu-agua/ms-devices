@@ -76,6 +76,7 @@ public class DeviceAdminTests
         Assert.Equal(DeviceStatus.NeverReported, device.Status);
         Assert.False(device.IsLinked);
         Assert.False(device.IsRevoked);
+        Assert.Equal(1, device.InactivityThresholdMinutes);   // HU-013: "disconnected" after 1 minute without reports
         Assert.Equal(DeviceSecrets.HashToken(credentials.AuthToken), device.AuthTokenHash);
         Assert.NotEqual(credentials.AuthToken, device.AuthTokenHash);
         Assert.True(device.PairingCodeMatches(credentials.PairingCode));
