@@ -150,7 +150,7 @@ public class DeviceUseCasesTests
     {
         _devices.Devices.Add(TestDevices.New(lastReportAt: TestDevices.Now.AddMinutes(-11), placeId: _placeId, linkedBy: _userId));
 
-        var view = await new GetPlaceDeviceUseCase(_devices, _clock).ExecuteAsync(_userId, _placeId, default);
+        var view = await new GetPlaceDeviceUseCase(_devices, new FakePlaceAccessReader(), _clock).ExecuteAsync(_userId, _placeId, default);
 
         Assert.Equal(DeviceStatus.Disconnected, view.Status); // the column still says CONNECTED
     }
@@ -161,7 +161,7 @@ public class DeviceUseCasesTests
         _devices.Devices.Add(TestDevices.New(lastReportAt: TestDevices.Now, placeId: _placeId, linkedBy: Guid.NewGuid()));
 
         await Assert.ThrowsAsync<DeviceNotLinkedException>(() =>
-            new GetPlaceDeviceUseCase(_devices, _clock).ExecuteAsync(_userId, _placeId, default));
+            new GetPlaceDeviceUseCase(_devices, new FakePlaceAccessReader(), _clock).ExecuteAsync(_userId, _placeId, default));
     }
 
     [Fact]
