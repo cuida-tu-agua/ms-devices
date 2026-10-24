@@ -70,6 +70,21 @@ internal sealed class FakePlaceOwnershipChecker : IPlaceOwnershipChecker
             : Task.FromResult(OwnedPlaces.Contains(placeId));
 }
 
+/// <summary>place-service double for sharing: what each place gives to the requester, or pretends to be down.</summary>
+internal sealed class FakePlaceAccessReader : IPlaceAccessReader
+{
+    public Dictionary<Guid, PlaceAccess> Access { get; } = [];
+    public bool IsDown { get; set; }
+    public int Calls { get; private set; }
+
+    public Task<PlaceAccess?> GetRequesterAccessAsync(Guid placeId, CancellationToken ct)
+    {
+        Calls++;
+        if (IsDown) throw new ExternalServiceUnavailableException("place-service");
+        return Task.FromResult(Access.GetValueOrDefault(placeId));
+    }
+}
+
 internal sealed class FakeClock(DateTime utcNow) : TimeProvider
 {
     public DateTime UtcNow { get; set; } = utcNow;
