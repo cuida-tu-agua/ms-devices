@@ -129,7 +129,8 @@ public class TelemetryAndValveTests
 
     // ── Valve orders (bridge for valve-service) ──────────────────────────
 
-    private SendValveCommandUseCase Send() => new(_devices, _sender, _clock);
+    private readonly FakePlaceAccessReader _access = new();
+    private SendValveCommandUseCase Send() => new(_devices, _sender, _access, _clock);
 
     [Fact]
     public async Task An_order_goes_to_the_device_of_the_place()
