@@ -72,6 +72,11 @@ public static class ServiceCollectionExtensions
             client.BaseAddress = new Uri(placesUrl.EndsWith('/') ? placesUrl : placesUrl + "/");
             client.Timeout = TimeSpan.FromSeconds(5);
         });
+        services.AddHttpClient<IPlaceAccessReader, HttpPlaceAccessReader>(client =>
+        {
+            client.BaseAddress = new Uri(placesUrl.EndsWith('/') ? placesUrl : placesUrl + "/");
+            client.Timeout = TimeSpan.FromSeconds(5);
+        });
         return services;
     }
 
