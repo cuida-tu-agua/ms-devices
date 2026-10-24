@@ -3,7 +3,7 @@ using SyWater.Devices.Application.Ports.In;
 namespace SyWater.Devices.Api.Background;
 
 /// <summary>
-/// HU-013: every minute, CONNECTED devices that stopped reporting are saved as DISCONNECTED.
+/// HU-013: every 15 s, CONNECTED devices that stopped reporting are saved as DISCONNECTED.
 /// (The API already calculates the status on each read; this keeps the column honest for other readers.)
 /// </summary>
 public sealed class DeviceStatusSweeper(
@@ -13,7 +13,7 @@ public sealed class DeviceStatusSweeper(
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var seconds = config.GetValue("Devices:StatusSweepSeconds", 60);
+        var seconds = config.GetValue("Devices:StatusSweepSeconds", 15);
         using var timer = new PeriodicTimer(TimeSpan.FromSeconds(seconds));
 
         try
